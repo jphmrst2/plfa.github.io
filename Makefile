@@ -1,6 +1,6 @@
 SHELL := /usr/bin/env bash
-AGDA_FILES := $(shell find . -type f -and \( -path '*/src/*' -or -path '*/courses/*' \) -and -name '*.lagda.md')
-AGDAI_FILES := $(shell find . -type f -and \( -path '*/src/*' -or -path '*/courses/*' \) -and -name '*.agdai')
+AGDA_FILES := $(shell find . -type f -and \( -path './src/*' -or -path './courses/*' \) -and -name '*.lagda.md')
+AGDAI_FILES := $(shell find . -type f -and \( -path './src/*' -or -path './courses/*' \) -and -name '*.agdai')
 MARKDOWN_FILES := $(subst courses/,out/,$(subst src/,out/,$(subst .lagda.md,.md,$(AGDA_FILES))))
 PLFA_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 PANDOC := pandoc
@@ -106,7 +106,7 @@ in := $(1)
 out := $(subst courses/,out/,$(subst src/,out/,$(subst .lagda.md,.md,$(1))))
 $$(out) : in  = $(1)
 $$(out) : out = $(subst courses/,out/,$(subst src/,out/,$(subst .lagda.md,.md,$(1))))
-$$(out) : $$(in) | out/
+$$(out) : $$(in)
 	@echo "Processing $$(subst ./,,$$(in))"
 	@mkdir -p out/
 ifeq (,$$(findstring courses/,$$(in)))
@@ -146,7 +146,7 @@ epub: out/epub/plfa.epub
 epubcheck: out/epub/plfa.epub
 	$(EPUBCHECK) out/epub/plfa.epub
 
-out/epub/plfa.epub: out/epub/ | $(AGDA_FILES) $(LUA_FILES) epub/main.css out/epub/acknowledgements.md
+out/epub/plfa.epub: $(AGDA_FILES) $(LUA_FILES) epub/main.css out/epub/acknowledgements.md
 	@mkdir -p out/epub/
 	$(PANDOC) --strip-comments \
 		--css=epub/main.css \
