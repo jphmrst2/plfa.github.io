@@ -15,6 +15,7 @@ cache:
   - $HOME/agda-$AGDA_VERSION
   - $HOME/agda-stdlib-$AGDA_STDLIB_VERSION
   - $HOME/acknowledgements-master
+  - $TRAVIS_BUILD_DIR/tmp/.htmlproofer
 
 # Ensure necessary system libraries are present
 addons:

@@ -61,6 +61,7 @@ build-history: latest/ $(RELEASES)
 latest/: $(addprefix .versions/plfa.github.io-web-,$(addsuffix /,$(LATEST_VERSION)))
 	$(SEDI) "s/branch: dev/branch: dev-$(LATEST_VERSION)/" $(addsuffix _config.yml,$<)
 	cd $< \
+		&& rm -rf _posts \
 		&& $(JEKYLL) clean \
 		&& $(JEKYLL) build --destination '../../latest' --baseurl '/latest'
 
@@ -124,11 +125,17 @@ $(foreach agda,$(AGDA_FILES),$(eval $(call AGDA_template,$(agda))))
 
 # Test links using htmlproofer
 test: build
-	$(HTMLPROOFER) '_site'
+	$(HTMLPROOFER) \
+		--file-ignore '/_site\/19\.08\//' \
+		--timeframe '2w' \
+		--http-status-ignore '429' \
+		'_site'
 
 # Test local links using htmlproofer
 test-offline: build
-	$(HTMLPROOFER) '_site' --disable-external
+	$(HTMLPROOFER) \
+		--disable-external \
+		'_site'
 
 # Test local links for stability under different base URLs
 test-stable-offline: $(MARKDOWN_FILES)
